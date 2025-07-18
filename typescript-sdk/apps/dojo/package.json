@@ -15,6 +15,7 @@
     "@ag-ui/langgraph": "workspace:*",
     "@ag-ui/llamaindex": "workspace:*",
     "@ag-ui/mastra": "workspace:*",
+    "@ag-ui/openai-server": "workspace:*",
     "@ag-ui/middleware-starter": "workspace:*",
     "@ag-ui/server-starter": "workspace:*",
     "@ag-ui/server-starter-all-features": "workspace:*",

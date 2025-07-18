@@ -94,57 +94,48 @@ export function Sidebar({ activeTab = "preview", onTabChange, readmeContent }: S
         <div className="flex items-center justify-between ml-1">
           <div className="flex items-start flex-col">
             <h1 className={`text-lg font-light ${isDarkTheme ? "text-white" : "text-gray-900"}`}>
-              AG-UI Interactive Dojo
+              Care Team Assistant
             </h1>
           </div>
 
           <ThemeToggle />
         </div>
       </div>
-
-      {/* Controls Section */}
+      {/* Member Information Form */}
       <div className="p-4 border-b bg-background">
-        {/* Preview/Code Tabs */}
-        <div className="mb-1">
-          <label className="block text-sm font-medium text-muted-foreground mb-2">View</label>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="w-full justify-between">
-                {currentIntegration ? currentIntegration.name : "Select Integration"}
-                <ChevronDown className="h-4 w-4 opacity-50" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
-              {menuIntegrations.map((integration) => (
-                <DropdownMenuItem
-                  key={integration.id}
-                  onClick={() => {
-                    router.push(`/${integration.id}`);
-                  }}
-                  className="cursor-pointer"
-                >
-                  <span>{integration.name}</span>
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </div>
-
-      {/* Demo List */}
-      <div className="flex-1 overflow-auto">
-        {currentIntegration ? (
-          <DemoList
-            demos={filteredDemos}
-            selectedDemo={currentDemoId}
-            onSelect={handleDemoSelect}
-          />
-        ) : (
-          <div className="flex items-center justify-center h-full p-8">
-            <p className="text-muted-foreground text-center"></p>
+        <form className="flex flex-col gap-4">
+          <div>
+            <label htmlFor="firstname" className="block text-sm font-medium mb-1">First Name</label>
+            <input
+              id="firstname"
+              name="firstname"
+              type="text"
+              className="w-full px-2 py-1 border rounded"
+              placeholder="Enter first name"
+            />
           </div>
-        )}
+          <div>
+            <label htmlFor="lastname" className="block text-sm font-medium mb-1">Last Name</label>
+            <input
+              id="lastname"
+              name="lastname"
+              type="text"
+              className="w-full px-2 py-1 border rounded"
+              placeholder="Enter last name"
+            />
+          </div>
+          <div>
+            <label htmlFor="dob" className="block text-sm font-medium mb-1">Date of Birth</label>
+            <input
+              id="dob"
+              name="dob"
+              type="date"
+              className="w-full px-2 py-1 border rounded"
+            />
+          </div>
+        </form>
       </div>
+      {/* No controls, dropdown, or demo list. Always default to agentic chat. */}
     </div>
   );
 }
