@@ -4,6 +4,7 @@ import "@copilotkit/react-ui/styles.css";
 import "./style.css";
 import { CopilotKit, useCoAgent, useCopilotAction, useCopilotChat } from "@copilotkit/react-core";
 import { CopilotChat } from "@copilotkit/react-ui";
+import { useMemberInfo } from "@/context/MemberInfoContext";
 
 interface AgenticChatProps {
   params: Promise<{
@@ -28,6 +29,8 @@ const AgenticChat: React.FC<AgenticChatProps> = ({ params }) => {
 
 const Chat = () => {
   const [background, setBackground] = useState<string>("--copilot-kit-background-color");
+  const { firstname, lastname, dob } = useMemberInfo();
+  console.log(firstname, lastname, dob);
 
   useCopilotAction({
     name: "change_background",
@@ -51,6 +54,8 @@ const Chat = () => {
         <CopilotChat
           className="h-full rounded-2xl"
           labels={{ initial: "Hi, I'm an agent. Want to chat?" }}
+   
+          // Example: pass handleSend to CopilotChat if it supports a send handler
         />
       </div>
     </div>

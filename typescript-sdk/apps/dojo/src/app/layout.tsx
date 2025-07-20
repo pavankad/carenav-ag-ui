@@ -4,6 +4,7 @@ import "./globals.css";
 import "@copilotkit/react-ui/styles.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { MainLayout } from "@/components/layout/main-layout";
+import { MemberInfoProvider } from "@/context/MemberInfoContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,7 +35,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <MainLayout>{children}</MainLayout>
+          <MemberInfoProvider>
+            <MainLayout>{children}</MainLayout>
+          </MemberInfoProvider>
         </ThemeProvider>
       </body>
     </html>

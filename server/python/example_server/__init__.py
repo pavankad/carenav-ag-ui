@@ -17,9 +17,41 @@ from ag_ui.core import (
     TextMessageEndEvent,
 )
 from ag_ui.encoder import EventEncoder
+
+# MCP
+from langchain_mcp_adapters.client import MultiServerMCPClient
+from langchain_openai import ChatOpenAI, AzureChatOpenAI, OpenAI
+from langgraph.prebuilt import create_react_agent
+import asyncio
 import pdb
 
 app = FastAPI(title="AG-UI Endpoint")
+
+
+# from azure.identity import DefaultAzureCredential, get_bearer_token_provider
+
+# # Get Azure token
+# default_credential = DefaultAzureCredential()
+# access_token = default_credential.get_token("https://cognitiveservices.azure.com/.default")
+
+# # Set API key from the access token
+# os.environ['OPENAI_API_KEY'] = access_token.token
+# os.environ['AZURE_OPENAI_ENDPOINT'] = 'https://api.uhg.com/api/cloud/api-management/ai-gateway/1.0'
+# # Define the MCP server URL
+# MCP_SERVER_URL = "http://127.0.0.1:8001/mcp"
+
+# # Initialize model with Azure-specific parameters
+# model = AzureChatOpenAI(
+#     azure_deployment="gpt-4o_2024-05-13",  # The deployment name in Azure
+#     api_version="2025-01-01-preview",  # Azure API version
+#     default_headers={
+#         "projectId": "f440d3f1-df7a-45fb-a62f-5953aaf6bd55",
+#         "x-idp": "azuread"
+#     }
+# )
+os.environ['OPENAI_API_KEY'] = ""
+model = ChatOpenAI(api_key=os.environ['OPENAI_API_KEY'], model_name="gpt-4o", temperature=0.7)
+
 
 @app.post("/")
 async def agentic_chat_endpoint(input_data: RunAgentInput, request: Request):
@@ -52,11 +84,27 @@ async def agentic_chat_endpoint(input_data: RunAgentInput, request: Request):
             )
         )
 
+        """Main function to process queries using the MCP client."""
+        async def mcp_query(query):
+            client = MultiServerMCPClient({
+                "mcpstore": {
+                    "url": "http://127.0.0.1:8001/mcp",  # Replace with the remote server's URL
+                    "transport": "streamable_http"
+                }
+            })
+            tools = await client.get_tools()
+            pdb.set_trace()
+            agent = create_react_agent(model, tools)
+            response = await agent.ainvoke({"messages": input_data.messages[1].content})
+            return response
+
+        result = await mcp_query(input_data.messages)
+
         yield encoder.encode(
             TextMessageContentEvent(
                 type=EventType.TEXT_MESSAGE_CONTENT,
                 message_id=message_id,
-                delta="Hello world!"
+                delta=result
             )
         )
 

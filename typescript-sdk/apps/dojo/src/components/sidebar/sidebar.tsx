@@ -18,6 +18,7 @@ import {
 import { Button } from "../ui/button";
 import { menuIntegrations } from "@/menu";
 import { Feature } from "@/types/integration";
+import { useMemberInfo } from "@/context/MemberInfoContext";
 
 interface SidebarProps {
   activeTab?: string;
@@ -29,6 +30,7 @@ export function Sidebar({ activeTab = "preview", onTabChange, readmeContent }: S
   const router = useRouter();
   const pathname = usePathname();
   const [isDarkTheme, setIsDarkTheme] = useState<boolean>(false);
+  const { firstname, setFirstname, lastname, setLastname, dob, setDob } = useMemberInfo();
 
   // Extract the current integration ID from the pathname
   const pathParts = pathname.split("/");
@@ -112,6 +114,8 @@ export function Sidebar({ activeTab = "preview", onTabChange, readmeContent }: S
               type="text"
               className="w-full px-2 py-1 border rounded"
               placeholder="Enter first name"
+              value={firstname}
+              onChange={e => setFirstname(e.target.value)}
             />
           </div>
           <div>
@@ -122,6 +126,8 @@ export function Sidebar({ activeTab = "preview", onTabChange, readmeContent }: S
               type="text"
               className="w-full px-2 py-1 border rounded"
               placeholder="Enter last name"
+              value={lastname}
+              onChange={e => setLastname(e.target.value)}
             />
           </div>
           <div>
@@ -131,6 +137,8 @@ export function Sidebar({ activeTab = "preview", onTabChange, readmeContent }: S
               name="dob"
               type="date"
               className="w-full px-2 py-1 border rounded"
+              value={dob}
+              onChange={e => setDob(e.target.value)}
             />
           </div>
         </form>
